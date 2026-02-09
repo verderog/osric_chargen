@@ -798,7 +798,7 @@ def display_player_info(pi):
         tmp_saves = class_specs[cls]["saving throws"][0]
         if saves:
             for k,v in tmp_saves.items():
-                if saves[k] > v:
+                if saves[k] < v:
                     saves[k] = v
         else:
             saves = tmp_saves.copy()
