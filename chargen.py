@@ -658,7 +658,14 @@ def generate_player_hp(pi,level):
         
         # get hit-die
         hd = class_specs[cls]["hit_die"][level-1]
-        roll = int((roll_die(hd) + hp_modifier) / multi_class_divider)
+        if cls == 'ranger' and level == 1:
+            if hp_modifier > 0:
+                # Rangers apply CON bonus to their both of their HD rolls at first level
+                roll = int((roll_die(hd) + 2 * hp_modifier) / multi_class_divider)
+            else:
+                roll = int((roll_die(hd) + hp_modifier) / multi_class_divider)
+        else:
+            roll = int((roll_die(hd) + hp_modifier) / multi_class_divider)
         if roll <= 0:
             roll = 1
         val = val + roll
@@ -792,7 +799,7 @@ def display_player_info(pi):
     
     # save vs
     # aimed magic items / breath weapons / death, paralysis, poison / petrification, polymorph / spells
-    # pick best saving throws for multi-classes
+    # pick best saving throws for multi-classes (a lower save value is better)
     saves = None
     for cls in pi["class"].split("/"):
         tmp_saves = class_specs[cls]["saving throws"][0]
